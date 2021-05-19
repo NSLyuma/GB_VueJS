@@ -38,15 +38,20 @@
     </div>
 
     <div v-if="checked">
-      <button v-for="(item, index) in numbers" v-bind:key="index">
-        {{ item }}
+      <button v-for="item in 10" :key="item" @click="inputNumber(item - 1)">
+        {{ item - 1 }}
       </button>
+      <button @click="deleteNumber">&#8592;</button>
 
       <div>
-        <input type="radio" name="operand" id="first" v-model="first" checked />
-        <label for="first">Операнд 1</label>
-        <input type="radio" name="operand" id="second" v-model="second" />
-        <label for="second">Операнд 2</label>
+        <label>
+          <input type="radio" value="1" v-model="change" />
+          Операнд 1
+        </label>
+        <label>
+          <input type="radio" value="2" v-model="change" />
+          Операнд 2
+        </label>
       </div>
     </div>
     <br />
@@ -74,10 +79,8 @@ export default {
     operand2: 0,
     result: 0,
     error: "",
-    numbers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
     checked: true,
-    first: true,
-    second: false,
+    change: "",
   }),
   props: {
     title: String,
@@ -136,6 +139,18 @@ export default {
         },
       };
       this.result = calc.operation(operand1, operand2, operation);
+    },
+    inputNumber(i) {
+      const { change } = this;
+      const input = change === "1" ? "operand1" : "operand2";
+      this[input] = +(this[input] += String(i));
+    },
+    deleteNumber() {
+      const { change } = this;
+      const input = change === "1" ? "operand1" : "operand2";
+      let inpString = String(this[input]);
+      this[input] = inpString.substring(0, inpString.length - 1);
+      // console.log(this[input]);
     },
   },
   computed: {
